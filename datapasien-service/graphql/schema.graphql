@@ -1,0 +1,16 @@
+type Query {
+    patients: [Patient!]! @all
+    patient(id: ID! @eq): Patient @find
+}
+
+type Patient {
+    id: ID!
+    name: String!
+    nik: String!
+    phone: String!
+    birth_date: String!
+    address: String!
+    allergies: String
+    created_at: String
+    updated_at: String
+}

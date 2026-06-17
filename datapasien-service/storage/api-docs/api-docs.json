@@ -1,0 +1,130 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Data Pasien Service",
+        "description": "API untuk pencatatan data pasien rawat jalan",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/patients": {
+            "get": {
+                "summary": "Ambil semua data pasien",
+                "operationId": "69a46ed96bac75dd121e6dc98a33c34e",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "summary": "Registrasi pasien baru",
+                "operationId": "ba689ca69bc6286a99ce90c5eb6f868c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "nik",
+                                    "phone",
+                                    "birth_date",
+                                    "address"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Widia Mesra"
+                                    },
+                                    "nik": {
+                                        "type": "string",
+                                        "example": "102022430029"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "082276162672"
+                                    },
+                                    "birth_date": {
+                                        "type": "string",
+                                        "example": "2007-01-13"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Medan"
+                                    },
+                                    "allergies": {
+                                        "type": "string",
+                                        "example": "Buah"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Patient created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/patients/{id}": {
+            "get": {
+                "summary": "Ambil data pasien by ID",
+                "operationId": "514d5adfebfd677bbd79e439d5abfad6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "404": {
+                        "description": "Patient not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "ApiKeyAuth": {
+                "type": "apiKey",
+                "name": "X-IAE-KEY",
+                "in": "header"
+            }
+        }
+    }
+}
