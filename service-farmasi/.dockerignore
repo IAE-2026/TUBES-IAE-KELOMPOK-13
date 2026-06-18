@@ -1,0 +1,10 @@
+.git
+/vendor
+/node_modules
+.env.backup
+.phpunit.result.cache
+*.pdf
+*.zip
+*.rar
+docker-compose.yml
+Dockerfile
