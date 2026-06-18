@@ -1,0 +1,160 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Pharmacy Service API",
+        "version": "1.0.0",
+        "description": "API dokumentasi untuk Service Farmasi & Obat"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080/api/v1",
+            "description": "Local server"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Resep",
+            "description": "Endpoint untuk pengelolaan resep"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "ApiKeyAuth": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "X-IAE-KEY"
+            }
+        }
+    },
+    "security": [
+        {
+            "ApiKeyAuth": []
+        }
+    ],
+    "paths": {
+        "/prescriptions": {
+            "get": {
+                "summary": "Ambil semua resep untuk antrian verifikasi",
+                "tags": ["Resep"],
+                "security": [{"ApiKeyAuth": []}],
+                "responses": {
+                    "200": {
+                        "description": "Data berhasil diambil",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "message": "Data berhasil diambil",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "id_pasien": 1,
+                                            "id_kunjungan": 1,
+                                            "nama_dokter": "Dr. Budi",
+                                            "status": "pending",
+                                            "items": [
+                                                {
+                                                    "id_obat": 1,
+                                                    "jumlah": 10,
+                                                    "dosis": "3x sehari"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "meta": {
+                                        "nama_service": "pharmacy-service",
+                                        "versi_api": "v1"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Tidak terotorisasi"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Dokter tulis resep digital",
+                "tags": ["Resep"],
+                "security": [{"ApiKeyAuth": []}],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "example": {
+                                "id_pasien": 1,
+                                "id_kunjungan": 1,
+                                "nama_dokter": "Dr. Budi",
+                                "items": [
+                                    {
+                                        "id_obat": 1,
+                                        "jumlah": 10,
+                                        "dosis": "3x sehari"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Resep berhasil dibuat"
+                    },
+                    "401": {
+                        "description": "Tidak terotorisasi"
+                    }
+                }
+            }
+        },
+        "/prescriptions/{id}": {
+            "get": {
+                "summary": "Detail resep + status dispensed",
+                "tags": ["Resep"],
+                "security": [{"ApiKeyAuth": []}],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {"type": "integer"}
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data berhasil diambil",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "message": "Data berhasil diambil",
+                                    "data": {
+                                        "id": 1,
+                                        "id_pasien": 1,
+                                        "id_kunjungan": 1,
+                                        "nama_dokter": "Dr. Budi",
+                                        "status": "dispensed",
+                                        "items": [
+                                            {
+                                                "id_obat": 1,
+                                                "jumlah": 10,
+                                                "dosis": "3x sehari"
+                                            }
+                                        ]
+                                    },
+                                    "meta": {
+                                        "nama_service": "pharmacy-service",
+                                        "versi_api": "v1"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resep tidak ditemukan"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,41 @@
+type Obat {
+    id: ID!
+    nama: String!
+    kategori: String!
+    deskripsi: String
+    stok: Int!
+    harga: Float!
+    satuan: String!
+}
+
+type ItemResep {
+    id: ID!
+    id_obat: Int!
+    jumlah: Int!
+    dosis: String!
+    obat: Obat
+}
+
+type Resep {
+    id: ID!
+    id_pasien: Int!
+    id_kunjungan: Int!
+    nama_dokter: String!
+    status: String!
+    items: [ItemResep]
+}
+
+type Query {
+    daftarObat: [Obat!]!
+    detailObat(id: ID!): Obat
+    daftarResep: [Resep!]!
+    detailResep(id: ID!): Resep
+}
+
+type Mutation {
+    buatResep(
+        id_pasien: Int!
+        id_kunjungan: Int!
+        nama_dokter: String!
+    ): Resep
+}
