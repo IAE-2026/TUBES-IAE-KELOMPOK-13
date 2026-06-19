@@ -26,7 +26,7 @@ Widia berperan sebagai integrator utama yang mengerjakan penggabungan seluruh se
 **Total Commit:** 4 commit
 
 ### Kontribusi Utama:
-- feat: tambah service jadwal dokter : Implementasi service jadwal dokter dengan endpoint untuk melihat dan booking slot dokter
+- tambah service jadwal dokter : Implementasi service jadwal dokter dengan endpoint untuk melihat dan booking slot dokter
 - add docker-compose for jadwaldokter-service : Penambahan konfigurasi Docker untuk service jadwal dokter
 - add docker for jadwaldokter-service : Penambahan Dockerfile untuk containerisasi service
 - add missing project files after move to C drive : Perbaikan file project yang hilang saat perpindahan environment
@@ -42,7 +42,7 @@ Zidan bertanggung jawab atas service penjadwalan dokter yang menangani alur book
 
 ### Kontribusi Utama:
 - Create service-farmasi : Inisialisasi repository service farmasi dengan struktur Laravel lengkap beserta Dockerfile dan docker-compose
-- feat: inisialisasi service farmasi : Implementasi endpoint resep digital (POST, GET prescriptions) dengan autentikasi Bearer Token
+- inisialisasi service farmasi : Implementasi endpoint resep digital (POST, GET prescriptions) dengan autentikasi Bearer Token
 
 ### Peran dalam Integrasi:
 Rayula mengerjakan service farmasi sebagai endpoint terakhir dalam alur bisnis rawat jalan yang menangani penulisan dan pengambilan resep digital setelah pemeriksaan dokter selesai.
