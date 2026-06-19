@@ -35,4 +35,25 @@ class MedicineController extends Controller
             'meta'    => ['nama_service' => 'pharmacy-service', 'versi_api' => 'v1']
         ]);
     }
+
+    public function store(Request $request)
+    {
+        $tervalidasi = $request->validate([
+            'nama' => 'required|string|max:255',
+            'kategori' => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'stock' => 'required|integer|min:0',
+            'harga' => 'required|numeric|min:0',
+            'satuan' => 'required|string|max:255',
+        ]);
+
+        $obat = Medicine::create($tervalidasi);
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Obat berhasil dibuat',
+            'data'    => $obat,
+            'meta'    => ['nama_service' => 'pharmacy-service', 'versi_api' => 'v1']
+        ], 201);
+    }
 }

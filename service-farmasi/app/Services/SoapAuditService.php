@@ -15,11 +15,18 @@ class SoapAuditService
         try {
             $url = env('SSO_TOKEN_URL', 'https://iae-sso.virtualfri.id/api/v1/auth/token');
             $apiKey = env('SSO_M2M_API_KEY', env('SSO_API_KEY', 'KEY-MHS-176'));
+            $nim = env('SSO_M2M_NIM', env('SSO_NIM'));
+
+            if (empty($apiKey) || empty($nim)) {
+                Log::error('Missing SSO M2M credentials: api_key or nim');
+                return null;
+            }
 
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
             ])->post($url, [
                 'api_key' => $apiKey,
+                'nim' => $nim,
             ]);
 
             if ($response->successful()) {
