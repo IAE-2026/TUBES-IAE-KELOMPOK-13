@@ -29,9 +29,11 @@ class SSOService
     public function loginM2M(): string
     {
         $apiKey = env('SSO_M2M_KEY');
+        $nim = env('SSO_M2M_NIM');
  
         $response = Http::post("{$this->baseUrl}/api/v1/auth/token", [
             'api_key' => $apiKey,
+            'nim'     => $nim,
         ]);
  
         if (!$response->successful()) {
