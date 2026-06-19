@@ -1,5 +1,5 @@
 # AI Prompting Log - Tugas Besar
-## Nama Kelompok
+**Nama Kelompok**
 - **Widia Mesra Nainggolan Mahulae** 
 - **Rayula Samina**
 - **Zidan Aliansyah Shidiq**  
