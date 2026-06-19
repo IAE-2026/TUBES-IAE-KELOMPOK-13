@@ -57,3 +57,7 @@ Rayula mengerjakan service farmasi sebagai endpoint terakhir dalam alur proses b
 | zidanaliansyah11-tech | 11 | Jadwal Dokter |
 | rrayulaaa | 2 | Farmasi |
 | **Total** | **26** | **3 Services** |
+
+---
+
+## Untuk kontribusi individu yang lebih jelas, dapat dilihat di masing-masing folder service.

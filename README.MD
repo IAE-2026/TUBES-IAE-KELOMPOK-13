@@ -39,7 +39,5 @@
 | GET | /api/v1/prescriptions/{id} | Ambil resep by ID |
 | GET | /api/v1/prescriptions/{id} | status resep diperbarui jadi "dispensed" |
 
----
 
-## Untuk kontribusi individu yang lebih jelas, dapat dilihat di masing-masing folder service.
 
