@@ -7,7 +7,7 @@
 * **Nama Lengkap:** Widia Mesra Nainggolan Mahulae
 * **NIM:** 102022430029
 * **Service Utama:** Data Pasien Service (Service A)
-* **Grup/Kelompok:** Kelompok 13 
+* **Kelompok:** Kelompok 13 
 
 ---
 
