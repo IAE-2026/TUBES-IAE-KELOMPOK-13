@@ -2,21 +2,21 @@
 
 ---
  
-## 👥 Anggota Kelompok
+## Anggota Kelompok
  
 | Nama | NIM | Service |
 |---|---|---|
 | Widia Mesra Nainggolan Mahulae | 102022430029 | Data Pasien Service |
-| Zidan Aliansyah | - | Jadwal Dokter Service |
+| Zidan Aliansyah | 102022400220 | Jadwal Dokter Service |
 | Rayula | 102022400102 | Farmasi & Obat Service |
  
 ---
 
-## 📋 Proses Bisnis
+## Proses Bisnis
  
 **Pencatatan Rawat Jalan** adalah sistem terintegrasi yang mengelola alur pasien dari registrasi hingga pengambilan obat.
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### Data Pasien
 | Method | Endpoint | Deskripsi |
