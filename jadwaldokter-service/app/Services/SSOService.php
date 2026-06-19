@@ -16,11 +16,11 @@ class SSOService
     public function loginM2M(): string
     {
         $apiKey = env('SSO_M2M_KEY');
-        $nim = env('SSO_M2M_NIM');
+        $nim    = env('SSO_M2M_NIM', '102022400220');
 
         $response = Http::post("{$this->baseUrl}/api/v1/auth/token", [
             'api_key' => $apiKey,
-            'nim' => $nim,
+            'nim'     => $nim,
         ]);
 
         if (!$response->successful()) {
