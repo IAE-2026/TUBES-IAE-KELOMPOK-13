@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\DoctorSchedule;
+use App\Services\SSOService;
+use App\Services\SoapAuditService;
+use App\Services\AMQPPublisherService;
 use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
 
@@ -13,8 +16,22 @@ use OpenApi\Attributes as OA;
 )]
 class DoctorScheduleController extends Controller
 {
+    private SSOService $ssoService;
+    private SoapAuditService $soapAuditService;
+    private AMQPPublisherService $amqpService;
+
+    public function __construct(
+        SSOService $ssoService,
+        SoapAuditService $soapAuditService,
+        AMQPPublisherService $amqpService
+    ) {
+        $this->ssoService       = $ssoService;
+        $this->soapAuditService = $soapAuditService;
+        $this->amqpService      = $amqpService;
+    }
+
     #[OA\Get(
-        path: "/api/v1/doctor-schedules",
+        path: "/api/v1/schedules",
         summary: "Ambil semua jadwal dokter",
         tags: ["Doctor Schedule"],
         security: [["ApiKeyAuth" => []]],
@@ -25,18 +42,18 @@ class DoctorScheduleController extends Controller
     public function index()
     {
         return response()->json([
-            "status" => "success",
+            "status"  => "success",
             "message" => "Data retrieved successfully",
-            "data" => DoctorSchedule::all(),
-            "meta" => [
+            "data"    => DoctorSchedule::all(),
+            "meta"    => [
                 "service_name" => "JadwalDokter-Service",
-                "api_version" => "v1"
+                "api_version"  => "v1"
             ]
         ]);
     }
 
     #[OA\Get(
-        path: "/api/v1/doctor-schedules/{id}",
+        path: "/api/v1/schedules/{id}",
         summary: "Ambil detail jadwal dokter",
         tags: ["Doctor Schedule"],
         security: [["ApiKeyAuth" => []]],
@@ -59,22 +76,22 @@ class DoctorScheduleController extends Controller
 
         if (!$data) {
             return response()->json([
-                "status" => "error",
+                "status"  => "error",
                 "message" => "Data not found",
-                "data" => null
+                "data"    => null
             ], 404);
         }
 
         return response()->json([
-            "status" => "success",
+            "status"  => "success",
             "message" => "Data retrieved successfully",
-            "data" => $data
+            "data"    => $data
         ]);
     }
 
     #[OA\Post(
-        path: "/api/v1/doctor-schedules",
-        summary: "Tambah jadwal dokter",
+        path: "/api/v1/schedules",
+        summary: "Booking jadwal dokter",
         tags: ["Doctor Schedule"],
         security: [["ApiKeyAuth" => []]],
         requestBody: new OA\RequestBody(
@@ -96,12 +113,41 @@ class DoctorScheduleController extends Controller
     )]
     public function store(Request $request)
     {
-        $data = DoctorSchedule::create($request->all());
+        // 1. Login SSO - dapat token
+        $token = $this->ssoService->loginM2M();
+
+        // 2. Simpan data booking ke DB
+        $data = DoctorSchedule::create(array_merge(
+            $request->all(),
+            ['status' => 'booked']
+        ));
+
+        // 3. Kirim SOAP Audit
+        $this->soapAuditService->sendAudit($token, 'BOOKING_DOCTOR_SCHEDULE', [
+            'schedule_id'    => $data->id,
+            'doctor_name'    => $data->doctor_name,
+            'specialization' => $data->specialization,
+            'schedule_date'  => $data->schedule_date,
+            'start_time'     => $data->start_time,
+            'end_time'       => $data->end_time,
+            'status'         => $data->status,
+        ]);
+
+        // 4. Broadcast event ke RabbitMQ
+        $this->amqpService->publish($token, [
+            'event'          => 'SCHEDULE_BOOKED',
+            'schedule_id'    => $data->id,
+            'doctor_name'    => $data->doctor_name,
+            'specialization' => $data->specialization,
+            'schedule_date'  => $data->schedule_date,
+            'status'         => $data->status,
+            'timestamp'      => now()->toISOString(),
+        ], 'jadwaldokter.booked');
 
         return response()->json([
-            "status" => "success",
-            "message" => "Data created successfully",
-            "data" => $data
+            "status"  => "success",
+            "message" => "Booking berhasil",
+            "data"    => $data
         ], 201);
     }
 }
