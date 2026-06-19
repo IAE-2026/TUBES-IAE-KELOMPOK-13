@@ -1,12 +1,22 @@
-version: '3.8'
+version: "3.8"
 
 services:
   app:
     build: .
-    container_name: jadwaldokter-service
+    container_name: laravel_app
     ports:
       - "8000:8000"
     volumes:
       - .:/var/www
-    working_dir: /var/www
-    command: php artisan serve --host=0.0.0.0 --port=8000
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: jadwaldokter
+    ports:
+      -  "3307:3306"

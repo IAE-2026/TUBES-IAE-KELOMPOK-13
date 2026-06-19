@@ -1,38 +1,17 @@
-FROM php:8.2-cli
+FROM php:8.2-fpm
 
-# Install dependency
+WORKDIR /var/www
+
 RUN apt-get update && apt-get install -y \
-    unzip \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip
+    git curl zip unzip libpng-dev libonig-dev libxml2-dev
 
-# Install extension
-RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath
+RUN docker-php-ext-install pdo pdo_mysql
 
-# Install composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Workdir
-WORKDIR /app
-
-# Copy composer
-COPY composer.json composer.lock ./
-
-RUN composer install --ignore-platform-reqs --no-scripts
-
-# Copy project
 COPY . .
 
-# Buat folder cache dan beri permission
-RUN mkdir -p bootstrap/cache \
-    && chmod -R 777 bootstrap/cache storage
-
-# Generate autoload
-RUN composer dump-autoload --optimize --ignore-platform-reqs
+RUN composer install
 
 EXPOSE 8000
 
