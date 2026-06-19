@@ -9,9 +9,11 @@ RUN docker-php-ext-install pdo pdo_mysql
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# copy SEMUA source dulu (biar artisan ada)
 COPY . .
 
-RUN composer install
+# baru install dependency
+RUN composer install --no-interaction --prefer-dist
 
 EXPOSE 8000
 
