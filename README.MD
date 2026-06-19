@@ -1,4 +1,4 @@
-# TUBES-IAE-KELOMPOK-13
+# TUBES-IAE-KELOMPOK-13 - PENCATATAN RAWAT JALAN SISTEM E-HEALTHCARE
 
 ---
  
@@ -38,4 +38,8 @@
 | POST | /api/v1/prescriptions | Buat resep digital |
 | GET | /api/v1/prescriptions/{id} | Ambil resep by ID |
 | GET | /api/v1/prescriptions/{id} | status resep diperbarui jadi "dispensed" |
+
+---
+
+## Untuk kontribusi individu yang lebih jelas, dapat dilihat di masing-masing folder service.
 
