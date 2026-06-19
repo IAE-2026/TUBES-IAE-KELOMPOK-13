@@ -33,8 +33,6 @@ services:
       - API_KEY=102022430029
     depends_on:
       - db-pasien
-    volumes:
-      - ./datapasien-service:/var/www
     networks:
       - kelompok13-network
 
@@ -68,8 +66,6 @@ services:
     depends_on:
       - db-jadwal
       - datapasien-service
-    volumes:
-      - ./jadwaldokter-service:/var/www
     working_dir: /var/www
     command: php artisan serve --host=0.0.0.0 --port=8000
     networks:
@@ -105,8 +101,6 @@ services:
     depends_on:
       - db-farmasi
       - jadwaldokter-service
-    volumes:
-      - ./service-farmasi:/app
     networks:
       - kelompok13-network
 
