@@ -19,8 +19,6 @@ services:
   datapasien-service:
     build: ./datapasien-service
     container_name: datapasien-service
-    ports:
-      - "8001:8000"
     environment:
       - APP_ENV=local
       - APP_KEY=base64:CJ24da6kPL6HYLMQlvwa/nHh7zQTAme4gZ2lpWGqGVg=
@@ -51,8 +49,6 @@ services:
   jadwaldokter-service:
     build: ./jadwaldokter-service
     container_name: jadwaldokter-service
-    ports:
-      - "8002:8000"
     environment:
       - APP_ENV=local
       - APP_KEY=base64:fgJBd9HQcpxnbbDOqh2IzeVUjduF3J5+FpaETUkcJgY=
@@ -85,8 +81,6 @@ services:
   service-farmasi:
     build: ./service-farmasi
     container_name: service-farmasi
-    ports:
-      - "8003:8000"
     environment:
       - APP_ENV=local
       - APP_KEY=base64:seNDaNm78dmtS/AXx+cW2hjQvs+zZYMZbXMcwhHATHE=
@@ -98,6 +92,12 @@ services:
       - DB_PASSWORD=root
       - PASIEN_SERVICE_URL=http://datapasien-service:8000
       - JADWAL_SERVICE_URL=http://jadwaldokter-service:8000
+      - SSO_API_KEY=KEY-MHS-88
+      - SSO_M2M_API_KEY=KEY-MHS-88
+      - SSO_M2M_NIM=102022430029
+      - SSO_NIM=102022430029
+      - IAE_TEAM_ID=TEAM-13
+      - TEAM_ID=TEAM-13
     depends_on:
       - db-farmasi
       - jadwaldokter-service
