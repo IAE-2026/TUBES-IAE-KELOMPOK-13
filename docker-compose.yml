@@ -1,0 +1,129 @@
+version: '3.8'
+
+services:
+
+  nginx:
+    image: nginx:alpine
+    container_name: api-gateway
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - datapasien-service
+      - jadwaldokter-service
+      - service-farmasi
+    networks:
+      - kelompok13-network
+
+  datapasien-service:
+    build: ./datapasien-service
+    container_name: datapasien-service
+    ports:
+      - "8001:8000"
+    environment:
+      - APP_ENV=local
+      - APP_KEY=base64:CJ24da6kPL6HYLMQlvwa/nHh7zQTAme4gZ2lpWGqGVg=
+      - DB_CONNECTION=mysql
+      - DB_HOST=db-pasien
+      - DB_PORT=3306
+      - DB_DATABASE=patient_service
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - API_KEY=102022430029
+    depends_on:
+      - db-pasien
+    networks:
+      - kelompok13-network
+
+  db-pasien:
+    image: mysql:8.0
+    container_name: db-pasien
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: patient_service
+    volumes:
+      - db_pasien_data:/var/lib/mysql
+    networks:
+      - kelompok13-network
+
+  
+  jadwaldokter-service:
+    build: ./jadwaldokter-service
+    container_name: jadwaldokter-service
+    ports:
+      - "8002:8000"
+    environment:
+      - APP_ENV=local
+      - APP_KEY=base64:fgJBd9HQcpxnbbDOqh2IzeVUjduF3J5+FpaETUkcJgY=
+      - DB_CONNECTION=mysql
+      - DB_HOST=db-jadwal
+      - DB_PORT=3306
+      - DB_DATABASE=jadwaldokter_service
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - PASIEN_SERVICE_URL=http://datapasien-service:8000
+      -SO_BASE_URL=https://iae-sso.virtualfri.id    
+      - SSO_M2M_KEY=KEY-MHS-262                        
+      - SSO_M2M_NIM=102022400220                       
+      - SOAP_TEAM_ID=TEAM-13    
+    depends_on:
+      - db-jadwal
+      - datapasien-service
+    working_dir: /var/www
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    networks:
+      - kelompok13-network
+
+  db-jadwal:
+    image: mysql:8.0
+    container_name: db-jadwal
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: jadwaldokter_service
+    volumes:
+      - db_jadwal_data:/var/lib/mysql
+    networks:
+      - kelompok13-network
+
+  service-farmasi:
+    build: ./service-farmasi
+    container_name: service-farmasi
+    ports:
+      - "8003:8000"
+    environment:
+      - APP_ENV=local
+      - APP_KEY=base64:seNDaNm78dmtS/AXx+cW2hjQvs+zZYMZbXMcwhHATHE=
+      - DB_CONNECTION=mysql
+      - DB_HOST=db-farmasi
+      - DB_PORT=3306
+      - DB_DATABASE=laravel
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - PASIEN_SERVICE_URL=http://datapasien-service:8000
+      - JADWAL_SERVICE_URL=http://jadwaldokter-service:8000
+    depends_on:
+      - db-farmasi
+      - jadwaldokter-service
+    networks:
+      - kelompok13-network
+
+  db-farmasi:
+    image: mysql:8.0
+    container_name: db-farmasi
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+    volumes:
+      - db_farmasi_data:/var/lib/mysql
+    networks:
+      - kelompok13-network
+
+networks:
+  kelompok13-network:
+    driver: bridge
+
+volumes:
+  db_pasien_data:
+  db_jadwal_data:
+  db_farmasi_data:
